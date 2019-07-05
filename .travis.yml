@@ -4,4 +4,8 @@ jdk:
 sudo: true
 install: true
 dist: trusty
+before_install:
+  - chmod +x mvnw
+
+
 
