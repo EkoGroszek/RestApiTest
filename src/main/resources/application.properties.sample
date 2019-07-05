@@ -1,5 +1,5 @@
 
-server.port=8080 
+server.port=8080
 #Teraz Spring podniesie ? na porcie 8081.
 
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
