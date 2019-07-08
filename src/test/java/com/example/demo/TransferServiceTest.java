@@ -62,8 +62,8 @@ public class TransferServiceTest {
         transfer.setStatus("PENDING");
         transfer2 = transferService.changeTransferStatusToCompleted(transfer);
 
-//        Assert.assertThat(transfer2.getStatus(), equalTo("COMPLETED"));
-        Assert.assertThat(transfer2.getStatus(), equalTo("test failed "));
+        Assert.assertThat(transfer2.getStatus(), equalTo("COMPLETED"));
+//        Assert.assertThat(transfer2.getStatus(), equalTo("test failed "));
 
     }
 
