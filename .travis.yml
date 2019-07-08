@@ -22,7 +22,7 @@ spring:
   deploy:
     provider: heroku
     api_key:
-      secure: c212d231-acb8-4eae-b130-ff5141f575a2
+      secure: 636201b9-33d9-4496-891e-1fd3090612a3
     app: bankrestapicomarch
     on:
       repo: EkoGroszek/RestApiTest
