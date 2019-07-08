@@ -21,7 +21,7 @@ spring:
 deploy:
   provider: heroku
   api_key:
-     secure: "636201b9-33d9-4496-891e-1fd3090612a3"
-   app: secure-headland-72344
-   on:
-     repo: EkoGroszek/RestApiTest
+    secure: "636201b9-33d9-4496-891e-1fd3090612a3"
+    app: secure-headland-72344
+    on:
+      repo: EkoGroszek/RestApiTest
