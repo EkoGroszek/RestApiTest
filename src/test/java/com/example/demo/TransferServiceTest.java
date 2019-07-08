@@ -49,7 +49,7 @@ public class TransferServiceTest {
 //
         transferService = new TransferServiceImpl();
     }
-//cos tam
+//cos tam ;kajsd
 
     @Test
     public void transferBeforePostShouldHasStatusPending() {
