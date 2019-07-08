@@ -12,17 +12,16 @@ cache:
   directories:
     - .autoconf
     - $HOME/.m2
-
 spring:
   datasource:
     url: ${jdbc:mysql://localhost:3306/accounts_database?useSSL=false&serverTimezone=UTC}
     username: ${admin1}
     password: ${password1}
 
-  deploy:
-    provider: heroku
-    api_key:
-      secure: "636201b9-33d9-4496-891e-1fd3090612a3"
-    app: secure-headland-72344
-    on:
-      repo: EkoGroszek/RestApiTest
+deploy:
+  provider: heroku
+  api_key:
+     secure: "636201b9-33d9-4496-891e-1fd3090612a3"
+   app: secure-headland-72344
+   on:
+     repo: EkoGroszek/RestApiTest
