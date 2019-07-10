@@ -6,13 +6,16 @@ import com.example.demo.entities.DTO.AccountBalanceUpdateDTO;
 import com.example.demo.entities.Transfer;
 import com.example.demo.services.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("api/accounts")
+@RequestMapping("/api/accounts")
 public class AccountEndpoint {
     private AccountServiceImpl accountService;
 //test heroku v2z
@@ -22,8 +25,8 @@ public class AccountEndpoint {
     }
 
     @GetMapping("/all")
-    public Iterable<Account> getAll() {
-        return accountService.findAll();
+    public ResponseEntity<Iterable<Account>> getAll() {
+        return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
 
