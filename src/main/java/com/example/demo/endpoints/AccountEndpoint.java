@@ -18,14 +18,15 @@ import java.util.List;
 @RequestMapping("/api/accounts")
 public class AccountEndpoint {
     private AccountServiceImpl accountService;
-//test heroku v2z
+
+    //test heroku v2z
     @Autowired
     public AccountEndpoint(AccountServiceImpl accountService) {
         this.accountService = accountService;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Account>> getAll() {
+    public ResponseEntity<Iterable<Account>> getAll() {                                                                  //tak jak tu trzeba wszystko opakowywać
         return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
@@ -38,8 +39,9 @@ public class AccountEndpoint {
     }
 
     @PostMapping
-    public Account addAccount(@RequestBody Account account) {
-        return accountService.save(account);
+    public ResponseEntity<Account> addAccount(@RequestBody Account account) {
+
+        return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
     }
 
 
