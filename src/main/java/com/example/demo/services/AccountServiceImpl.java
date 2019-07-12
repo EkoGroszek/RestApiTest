@@ -2,7 +2,6 @@ package com.example.demo.services;
 
 import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
-import com.example.demo.entities.DTO.AccountBalanceInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +46,9 @@ public class AccountServiceImpl {
 
     public Account findByAccountNumber(String accountNumber){
         return accountRepository.findByAccountNumber(accountNumber);
+    }
+
+    public Optional<Account> findById(Integer account_id) {
+        return accountRepository.findById(account_id);
     }
 }

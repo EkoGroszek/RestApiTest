@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransferServiceImpl {
@@ -108,10 +109,6 @@ public class TransferServiceImpl {
         }
     }
 
-    public List<Transfer> getTransfersListForAccount(String account_number) {
-        return transferRepository.findAllBySendingAccountNumber(account_number);
-    }
-
     public double getRate(String sendedCurrency, String targetCurrency) {
         RestTemplate restTemplate = new RestTemplate();
         String fooResourceUrl
@@ -120,5 +117,21 @@ public class TransferServiceImpl {
         ExchangeRates exchangeRates = restTemplate
                 .getForObject(fooResourceUrl + sendedCurrency, ExchangeRates.class);
         return exchangeRates.getRates().get(targetCurrency);
+    }
+
+    public List<Transfer> getTransfersListForAccountByUserName(String account_number) {
+        return transferRepository.findAllBySendingAccountNumber(account_number);
+    }
+
+    public List<Transfer> getSendedTransfersListForAccountById(Integer account_id) {
+        Optional<Account> optionalAccount = accountService.findById(account_id);
+        Account account = optionalAccount.get();
+        return transferRepository.findAllBySendingAccountNumber(account.getAccountNumber());
+    }
+
+    public List<Transfer> getRecievedTransfersListForAccountById(Integer account_id) {
+        Optional<Account> optionalAccount = accountService.findById(account_id);
+        Account account = optionalAccount.get();
+        return transferRepository.findAllByTargetAccountNumber(account.getAccountNumber());
     }
 }
