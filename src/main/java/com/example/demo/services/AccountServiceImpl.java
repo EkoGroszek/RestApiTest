@@ -48,7 +48,8 @@ public class AccountServiceImpl {
         return accountRepository.findByAccountNumber(accountNumber);
     }
 
-    public Optional<Account> findById(Integer account_id) {
-        return accountRepository.findById(account_id);
+    public Account findById(Integer account_id) {
+        Account account = accountRepository.findById(account_id).get();
+        return account;
     }
 }

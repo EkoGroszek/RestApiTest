@@ -31,16 +31,18 @@ public class AccountEndpoint {
     }
 
 
-    @GetMapping("/{account_number}")
+    @GetMapping("/balance/{account_number}")
     public BigDecimal getCurrentBalance(@PathVariable String account_number) {
-
         return accountService.getCurrentBalance(account_number);
+    }
 
+    @GetMapping("/{account_id}")
+    public ResponseEntity<Account> getAccountById(@PathVariable Integer account_id){
+        return new ResponseEntity<>(accountService.findById(account_id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Account> addAccount(@RequestBody Account account) {
-
         return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
     }
 

@@ -124,14 +124,12 @@ public class TransferServiceImpl {
     }
 
     public List<Transfer> getSendedTransfersListForAccountById(Integer account_id) {
-        Optional<Account> optionalAccount = accountService.findById(account_id);
-        Account account = optionalAccount.get();
+        Account account = accountService.findById(account_id);
         return transferRepository.findAllBySendingAccountNumber(account.getAccountNumber());
     }
 
     public List<Transfer> getRecievedTransfersListForAccountById(Integer account_id) {
-        Optional<Account> optionalAccount = accountService.findById(account_id);
-        Account account = optionalAccount.get();
+        Account account = accountService.findById(account_id);
         return transferRepository.findAllByTargetAccountNumber(account.getAccountNumber());
     }
 }
