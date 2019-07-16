@@ -5,6 +5,7 @@ import com.example.demo.entities.DTO.AccountBalanceInfoDTO;
 import com.example.demo.entities.DTO.AccountBalanceUpdateDTO;
 import com.example.demo.entities.DTO.AccountNameUpdateDTO;
 import com.example.demo.entities.Transfer;
+import com.example.demo.entities.User;
 import com.example.demo.services.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -38,7 +38,7 @@ public class AccountEndpoint {
     }
 
     @GetMapping("/{account_id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Integer account_id){
+    public ResponseEntity<Account> getAccountById(@PathVariable Integer account_id) {
         return new ResponseEntity<>(accountService.findById(account_id), HttpStatus.OK);
     }
 
@@ -59,9 +59,16 @@ public class AccountEndpoint {
 
         return accountService.changeAccountName(account_number, newAccountName);
     }
+
     @PostMapping("/update/{id}")
-    public ResponseEntity<Account> updateAccountName(@RequestBody AccountNameUpdateDTO accountName, @PathVariable Integer id){
+    public ResponseEntity<Account> updateAccountName(@RequestBody AccountNameUpdateDTO accountName, @PathVariable Integer id) {
         return new ResponseEntity<>(accountService.updateAccountName(accountName, id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> deleteAccount(@PathVariable("id") Integer id) {
+        accountService.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

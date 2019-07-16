@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.DTO.AccountNameUpdateDTO;
+import com.example.demo.exceptions.AccountDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class AccountServiceImpl {
         return accountRepository.findAll();
     }
 
-    public Account save(Account account){
+    public Account save(Account account) {
         return accountRepository.save(account);
     }
 
@@ -45,7 +46,7 @@ public class AccountServiceImpl {
 
     }
 
-    public Account findByAccountNumber(String accountNumber){
+    public Account findByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber);
     }
 
@@ -61,4 +62,13 @@ public class AccountServiceImpl {
         return accountRepository.save(accountToChangeName);
 
     }
+
+    public void deleteAccount(Integer accountId) {
+        Optional<Account> account = accountRepository.findById(accountId);
+        if (!account.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono uzytkownika o id " + accountId);
+        }
+        accountRepository.deleteById(accountId);
+    }
+
 }

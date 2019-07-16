@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface AccountRepository extends CrudRepository<Account, Integer> {
     Account findByAccountNumber(String accountNumber);
     Optional<Account> findById(Integer iD);
-
 }
