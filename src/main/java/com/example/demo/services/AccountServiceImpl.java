@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
+import com.example.demo.entities.DTO.AccountNameUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,13 @@ public class AccountServiceImpl {
     public Account findById(Integer account_id) {
         Account account = accountRepository.findById(account_id).get();
         return account;
+    }
+
+    public Account updateAccountName(AccountNameUpdateDTO accountName, Integer id) {
+        Account accountToChangeName = accountRepository.findById(id).get();
+        accountToChangeName.setName(accountName.getAccountName());
+
+        return accountRepository.save(accountToChangeName);
+
     }
 }
