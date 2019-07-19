@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
+import com.example.demo.entities.DTO.AccountBalanceUpdateDTO;
 import com.example.demo.entities.DTO.AccountNameUpdateDTO;
 import com.example.demo.exceptions.AccountDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,46 +28,62 @@ public class AccountServiceImpl {
         return accountRepository.save(account);
     }
 
-    public Account updateAccountBalance(String accountNumber, BigDecimal balance) {
-        Account accountToUpdate = accountRepository.findByAccountNumber(accountNumber);
-        accountToUpdate.setBalance(balance);
-
-        return accountRepository.save(accountToUpdate);
+    public Account updateAccountBalance(String accountNumber, AccountBalanceUpdateDTO accountBalanceUpdate) {
+        BigDecimal updatedAccountBalance = accountBalanceUpdate.getBalance();
+        Optional<Account> accountToUpdate = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
+        if (!accountToUpdate.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountToUpdate);
+        }
+        accountToUpdate.get().setBalance(updatedAccountBalance);
+        return accountRepository.save(accountToUpdate.get());
     }
 
     public BigDecimal getCurrentBalance(String account_number) {
-        return accountRepository.findByAccountNumber(account_number).getBalance();
+        Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumber(account_number));
+        if (!account.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + account_number);
+        }
+        return account.get().getBalance();
     }
 
     public Account changeAccountName(String accountNumber, String newAccountName) {
-        Account accountToChangeName = accountRepository.findByAccountNumber(accountNumber);
-        accountToChangeName.setName(newAccountName);
-
-        return accountRepository.save(accountToChangeName);
-
+        Optional<Account> accountToChangeName = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
+        if (!accountToChangeName.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountNumber);
+        }
+        accountToChangeName.get().setName(newAccountName);
+        return accountRepository.save(accountToChangeName.get());
     }
 
     public Account findByAccountNumber(String accountNumber) {
-        return accountRepository.findByAccountNumber(accountNumber);
+        Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
+        if (!account.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountNumber);
+        }
+        return account.get();
     }
 
     public Account findById(Integer account_id) {
-        Account account = accountRepository.findById(account_id).get();
-        return account;
+        Optional<Account> account = accountRepository.findById(account_id);
+        if (!account.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o id " + account_id);
+        }
+        return account.get();
     }
 
     public Account updateAccountName(AccountNameUpdateDTO accountName, Integer id) {
-        Account accountToChangeName = accountRepository.findById(id).get();
-        accountToChangeName.setName(accountName.getAccountName());
-
-        return accountRepository.save(accountToChangeName);
-
+        Optional<Account> accountToChangeName = accountRepository.findById(id);
+        if (!accountToChangeName.isPresent()) {
+            throw new AccountDoesNotExist("Nie znaleziono konta o id " + id);
+        }
+        accountToChangeName.get().setName(accountName.getAccountName());
+        return accountRepository.save(accountToChangeName.get());
     }
 
     public void deleteAccount(Integer accountId) {
         Optional<Account> account = accountRepository.findById(accountId);
         if (!account.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono uzytkownika o id " + accountId);
+            throw new AccountDoesNotExist("Nie znaleziono konta o id " + accountId);
         }
         accountRepository.deleteById(accountId);
     }
