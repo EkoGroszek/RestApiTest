@@ -29,14 +29,14 @@ public class AccountEndpoint {
     }
 
     // TODO: 22.07.2019  zmienić nazwy na camelcase
-    @GetMapping("/balance/{account_number}")
-    public ResponseEntity<BigDecimal> getCurrentBalance(@PathVariable String account_number) {
-        return new ResponseEntity<>(accountService.getCurrentBalance(account_number), HttpStatus.OK);
+    @GetMapping("/balance/{accountNumber}")
+    public ResponseEntity<BigDecimal> getCurrentBalance(@PathVariable String accountNumber) {
+        return new ResponseEntity<>(accountService.getCurrentBalance(accountNumber), HttpStatus.OK);
     }
 
-    @GetMapping("/{account_id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Integer account_id) {
-        return new ResponseEntity<>(accountService.findById(account_id), HttpStatus.OK);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<Account> getAccountById(@PathVariable Integer accountId) {
+        return new ResponseEntity<>(accountService.findById(accountId), HttpStatus.OK);
     }
 
     @PostMapping
@@ -44,14 +44,14 @@ public class AccountEndpoint {
         return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
     }
 
-    @PatchMapping("/{account_number}")
-    public ResponseEntity<Account> updateAccountBalance(@RequestBody AccountBalanceUpdateDto accountBalanceUpdate, @PathVariable String account_number) {
-        return new ResponseEntity<>(accountService.updateAccountBalance(account_number, accountBalanceUpdate), HttpStatus.OK);
+    @PatchMapping("/{accountNumber}")
+    public ResponseEntity<Account> updateAccountBalance(@RequestBody AccountBalanceUpdateDto accountBalanceUpdate, @PathVariable String accountNumber) {
+        return new ResponseEntity<>(accountService.updateAccountBalance(accountNumber, accountBalanceUpdate), HttpStatus.OK);
     }
 
-    @PatchMapping("/{account_number}/name")
-    public ResponseEntity<Account> changeAccountName(@RequestBody String newAccountName, @PathVariable String account_number) {
-        return new ResponseEntity<>(accountService.changeAccountName(account_number, newAccountName), HttpStatus.OK);
+    @PatchMapping("/{accountNumber}/name")
+    public ResponseEntity<Account> changeAccountName(@RequestBody String newAccountName, @PathVariable String accountNumber) {
+        return new ResponseEntity<>(accountService.changeAccountName(accountNumber, newAccountName), HttpStatus.OK);
     }
 
     @PostMapping("/update/{id}")
