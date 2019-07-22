@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransferRepository extends CrudRepository <Transfer, Integer>{
-    List<Transfer> findAllBySendingAccountNumber(String accountNumber);
-    List<Transfer> findAllByTargetAccountNumber(String accountNumber);
-//    List<Transfer> findAllBySendingAccountId(Integer accountId);
+public interface TransferRepository extends CrudRepository<Transfer, Integer> {
 
-    List<Transfer> findAllById(Integer accountId);
+    List<Transfer> findAllBySendingAccountNumber(String accountNumber);
+
+    List<Transfer> findAllByTargetAccountNumber(String accountNumber);
+
 }

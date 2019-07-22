@@ -2,9 +2,9 @@ package com.example.demo.services;
 
 import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
-import com.example.demo.entities.DTO.AccountBalanceUpdateDTO;
-import com.example.demo.entities.DTO.AccountNameUpdateDTO;
-import com.example.demo.exceptions.AccountDoesNotExist;
+import com.example.demo.entities.DTO.AccountBalanceUpdateDto;
+import com.example.demo.entities.DTO.AccountNameUpdateDto;
+import com.example.demo.exceptions.AccountDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +28,12 @@ public class AccountServiceImpl {
         return accountRepository.save(account);
     }
 
-    public Account updateAccountBalance(String accountNumber, AccountBalanceUpdateDTO accountBalanceUpdate) {
+    // TODO: 22.07.2019  wynieść ifa do osobnej metody
+    public Account updateAccountBalance(String accountNumber, AccountBalanceUpdateDto accountBalanceUpdate) {
         BigDecimal updatedAccountBalance = accountBalanceUpdate.getBalance();
         Optional<Account> accountToUpdate = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
         if (!accountToUpdate.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountToUpdate);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o numerze " + accountToUpdate);
         }
         accountToUpdate.get().setBalance(updatedAccountBalance);
         return accountRepository.save(accountToUpdate.get());
@@ -41,7 +42,7 @@ public class AccountServiceImpl {
     public BigDecimal getCurrentBalance(String account_number) {
         Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumber(account_number));
         if (!account.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + account_number);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o numerze " + account_number);
         }
         return account.get().getBalance();
     }
@@ -49,7 +50,7 @@ public class AccountServiceImpl {
     public Account changeAccountName(String accountNumber, String newAccountName) {
         Optional<Account> accountToChangeName = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
         if (!accountToChangeName.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountNumber);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o numerze " + accountNumber);
         }
         accountToChangeName.get().setName(newAccountName);
         return accountRepository.save(accountToChangeName.get());
@@ -58,7 +59,7 @@ public class AccountServiceImpl {
     public Account findByAccountNumber(String accountNumber) {
         Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumber(accountNumber));
         if (!account.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o numerze " + accountNumber);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o numerze " + accountNumber);
         }
         return account.get();
     }
@@ -66,15 +67,15 @@ public class AccountServiceImpl {
     public Account findById(Integer account_id) {
         Optional<Account> account = accountRepository.findById(account_id);
         if (!account.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o id " + account_id);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o id " + account_id);
         }
         return account.get();
     }
 
-    public Account updateAccountName(AccountNameUpdateDTO accountName, Integer id) {
+    public Account updateAccountName(AccountNameUpdateDto accountName, Integer id) {
         Optional<Account> accountToChangeName = accountRepository.findById(id);
         if (!accountToChangeName.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o id " + id);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o id " + id);
         }
         accountToChangeName.get().setName(accountName.getAccountName());
         return accountRepository.save(accountToChangeName.get());
@@ -83,7 +84,7 @@ public class AccountServiceImpl {
     public void deleteAccount(Integer accountId) {
         Optional<Account> account = accountRepository.findById(accountId);
         if (!account.isPresent()) {
-            throw new AccountDoesNotExist("Nie znaleziono konta o id " + accountId);
+            throw new AccountDoesNotExistException("Nie znaleziono konta o id " + accountId);
         }
         accountRepository.deleteById(accountId);
     }

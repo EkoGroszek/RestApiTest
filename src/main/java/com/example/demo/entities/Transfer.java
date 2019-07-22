@@ -3,13 +3,10 @@ package com.example.demo.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
-
 @NoArgsConstructor
 @Getter
 @Setter
@@ -18,7 +15,7 @@ public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    // TODO: 22.07.2019  przerobić na konta zamiast numerów kont
     private String sendingAccountNumber;
 
     private BigDecimal amount;
@@ -31,6 +28,7 @@ public class Transfer {
 
     private String status;
 
+    // TODO: 22.07.2019  wyekstraktować enum do osobnej klasy "transferStatus"
     public enum status {
         PENDING, COMPLETED
     }

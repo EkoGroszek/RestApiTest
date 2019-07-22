@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountBalanceInfoDTO {
+public class AccountBalanceUpdateDto {
     private String accountNumber;
-    private BigDecimal currentBalance;
+    private BigDecimal balance;
+
+
 }

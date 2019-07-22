@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,25 +19,26 @@ public class TransferServiceImpl {
 
     private AccountServiceImpl accountService;
 
-    private List<Transfer> transfers = new ArrayList<>();
-
     @Autowired
-    public TransferServiceImpl(TransferRepository transferRepository1, AccountServiceImpl accountService) {
-        this.transferRepository = transferRepository1;
+    public TransferServiceImpl(TransferRepository transferRepository, AccountServiceImpl accountService) {
+        this.transferRepository = transferRepository;
         this.accountService = accountService;
     }
 
     @Scheduled(fixedRate = 15000)
     public void completeTransfer() {
-        transfers = (List<Transfer>) transferRepository.findAll();
+        // TODO: 22.07.2019  odfiltrować przelewy "panding" z bazy
+        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
 
-        for (Transfer transfer : transfers) {                                                                           //iteruje po tabeli przelewów
+        // TODO: 22.07.2019  nie uzależniać sie od nazyw enuma (getValue() w enumie)
+        for (Transfer transfer : transfers) {
             if (String.valueOf(Transfer.status.PENDING).equals(transfer.getStatus())) {
                 setTransferPostingDate(transfer);
-                addAmountToTargetAccount(transfer);                                        //dodaje kwote przelewu do konta docelowego
+                addAmountToTargetAccount(transfer);
                 changeTransferStatusToCompleted(transfer);
             }
-            transferRepository.save(transfer);                                                                          //zapis obiektu "transfer" do bazy danych
+            // TODO: 22.07.2019 dodać try catch żeby w razie błędu podczas updateu salda reszta kont zostła zupdateowana  
+            transferRepository.save(transfer);
         }
 
     }
@@ -50,22 +50,21 @@ public class TransferServiceImpl {
     }
 
     private void setTransferPostingDate(Transfer transfer) {
-        LocalDateTime dateOfPostingTransfer = LocalDateTime.now();                                              //tworzę date zaksięgowania przelewu
-        transfer.setDateOfPostingTransfer(dateOfPostingTransfer);                                               //zapisuje date do obiektu "Transfer"
+        transfer.setDateOfPostingTransfer(LocalDateTime.now());
     }
 
+    // TODO: 22.07.2019 test do tego | wyciągnąc do osobnej klasy | stworzyć interfejs (dwie implementacje z api i bez) "targetAccountBalanceCalculator" - fabryka
     private void addAmountToTargetAccount(Transfer transfer) {
-        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccountNumber());                //konto  z którego wysyłamy przelew
-        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());               //konto  na które wysyłamy przelew
+        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccountNumber());
+        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());
         BigDecimal amount = transfer.getAmount();
 
-        if (sendingAccount.getCurrency().equals(targetAccount.getCurrency())) {                                 //
+        if (sendingAccount.getCurrency().equals(targetAccount.getCurrency())) {
             targetAccount.setBalance(targetAccount.getBalance().add(amount));
         } else {
             BigDecimal amountAfterCurrencyConversion = amount.multiply(BigDecimal.valueOf(getRate(sendingAccount.getCurrency(), targetAccount.getCurrency())));
             targetAccount.setBalance(targetAccount.getBalance().add(amountAfterCurrencyConversion));
         }
-
         accountService.save(targetAccount);
 
     }
@@ -75,37 +74,34 @@ public class TransferServiceImpl {
         Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());
 
         BigDecimal amount = transfer.getAmount();
-        substractAmountFromSendingAccount(sendingAccount, targetAccount, amount);
+        subtractAmountFromSendingAccount(sendingAccount, amount);
         accountService.save(sendingAccount);
         accountService.save(targetAccount);
 
-        LocalDateTime dateOfSendingTransfer = LocalDateTime.now();
 
-        transfer.setDateOfSendingTransfer(dateOfSendingTransfer);
+        transfer.setDateOfSendingTransfer(LocalDateTime.now());
         transfer.setStatus(String.valueOf(Transfer.status.PENDING));
 
 
         return transferRepository.save(transfer);
     }
 
-    private void substractAmountFromSendingAccount(Account sendingAccount, Account targetAccount, BigDecimal amount) {
-        if (sendingAccount.getCurrency().equals(targetAccount.getCurrency())) {
-            sendingAccount.setBalance(sendingAccount.getBalance().subtract(amount));
-        } else {
-            sendingAccount.setBalance(sendingAccount.getBalance().subtract(amount));
-        }
+    private void subtractAmountFromSendingAccount(Account sendingAccount, BigDecimal amount) {
+        sendingAccount.setBalance(sendingAccount.getBalance().subtract(amount));
     }
 
-    public double getRate(String sendedCurrency, String targetCurrency) {
+    //// TODO: 22.07.2019  zmienić double na BigDecimal
+    //// TODO: 22.07.2019  zabezpieczyć przed Nullpointerem
+    private double getRate(String sendedCurrency, String targetCurrency) {
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl
-                = "https://api.exchangeratesapi.io/latest?base=";
+        String fooResourceUrl = "https://api.exchangeratesapi.io/latest?base=";
 
         ExchangeRates exchangeRates = restTemplate
                 .getForObject(fooResourceUrl + sendedCurrency, ExchangeRates.class);
         return exchangeRates.getRates().get(targetCurrency);
     }
 
+    // TODO: 22.07.2019 błąd w nazwie
     public List<Transfer> getTransfersListForAccountByUserName(String account_number) {
         return transferRepository.findAllBySendingAccountNumber(account_number);
     }

@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountNameUpdateDTO {
-    private String accountName;
+public class AccountBalanceInfoDto {
+    private String accountNumber;
+    private BigDecimal currentBalance;
 }

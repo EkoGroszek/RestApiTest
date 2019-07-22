@@ -38,9 +38,4 @@ public class TransferEndpoint {
     public ResponseEntity<Transfer> createTransfer(@RequestBody Transfer transfer) {
         return new ResponseEntity<>(transferService.createNewTransfer(transfer), HttpStatus.OK);
     }
-
-//    @PostMapping
-//    public Transfer createTransfer(@RequestBody Transfer transfer) {
-//        return transferService.createNewTransfer(transfer);
-//    }
 }

@@ -21,8 +21,9 @@ public class UserEndpoint {
     }
 
 
-    @GetMapping("/all")
-    public ResponseEntity<Iterable<User>> getAll() {                                                                  //tak jak tu trzeba wszystko opakowywać
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<Iterable<User>> getAll() {
+//        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+//    }
+
 }

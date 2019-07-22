@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class AccountDoesNotExist extends RuntimeException {
+public class AccountDoesNotExistException extends RuntimeException {
 
-    public AccountDoesNotExist(String message) {
+    public AccountDoesNotExistException(String message) {
         super(message);
     }
 }

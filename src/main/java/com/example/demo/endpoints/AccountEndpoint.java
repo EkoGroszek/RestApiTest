@@ -1,8 +1,8 @@
 package com.example.demo.endpoints;
 
 import com.example.demo.entities.Account;
-import com.example.demo.entities.DTO.AccountBalanceUpdateDTO;
-import com.example.demo.entities.DTO.AccountNameUpdateDTO;
+import com.example.demo.entities.DTO.AccountBalanceUpdateDto;
+import com.example.demo.entities.DTO.AccountNameUpdateDto;
 import com.example.demo.services.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,17 +18,17 @@ import java.math.BigDecimal;
 public class AccountEndpoint {
     private AccountServiceImpl accountService;
 
-    //test heroku v2z
     @Autowired
     public AccountEndpoint(AccountServiceImpl accountService) {
         this.accountService = accountService;
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Iterable<Account>> getAll() {                                                                  //tak jak tu trzeba wszystko opakowywać
+    public ResponseEntity<Iterable<Account>> getAll() {
         return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
+    // TODO: 22.07.2019  zmienić nazwy na camelcase
     @GetMapping("/balance/{account_number}")
     public ResponseEntity<BigDecimal> getCurrentBalance(@PathVariable String account_number) {
         return new ResponseEntity<>(accountService.getCurrentBalance(account_number), HttpStatus.OK);
@@ -45,7 +45,7 @@ public class AccountEndpoint {
     }
 
     @PatchMapping("/{account_number}")
-    public ResponseEntity<Account> updateAccountBalance(@RequestBody AccountBalanceUpdateDTO accountBalanceUpdate, @PathVariable String account_number) {
+    public ResponseEntity<Account> updateAccountBalance(@RequestBody AccountBalanceUpdateDto accountBalanceUpdate, @PathVariable String account_number) {
         return new ResponseEntity<>(accountService.updateAccountBalance(account_number, accountBalanceUpdate), HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class AccountEndpoint {
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<Account> updateAccountName(@RequestBody AccountNameUpdateDTO accountName, @PathVariable Integer id) {
+    public ResponseEntity<Account> updateAccountName(@RequestBody AccountNameUpdateDto accountName, @PathVariable Integer id) {
         return new ResponseEntity<>(accountService.updateAccountName(accountName, id), HttpStatus.OK);
     }
 
