@@ -12,36 +12,28 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransferServiceImpl {
+
     private TransferRepository transferRepository;
-    //    private AccountRepository accountRepository;
+
     private AccountServiceImpl accountService;
 
-    private int elops;
+    private List<Transfer> transfers = new ArrayList<>();
 
-    public TransferServiceImpl() {
-
+    @Autowired
+    public TransferServiceImpl(TransferRepository transferRepository1, AccountServiceImpl accountService) {
+        this.transferRepository = transferRepository1;
+        this.accountService = accountService;
     }
-
-
-    public TransferServiceImpl(TransferRepository transferRepository) {
-        this.transferRepository = transferRepository;
-    }
-
-    List<Transfer> transfers = new ArrayList<>();
 
     @Scheduled(fixedRate = 15000)
     public void completeTransfer() {
         transfers = (List<Transfer>) transferRepository.findAll();
-        Account sendingAccount = null;
-        Account targetAccount = null;
-        BigDecimal amount;
 
         for (Transfer transfer : transfers) {                                                                           //iteruje po tabeli przelewów
-            if (transfer.getStatus().equals(String.valueOf(Transfer.status.PENDING))) {
+            if (String.valueOf(Transfer.status.PENDING).equals(transfer.getStatus())) {
                 setTransferPostingDate(transfer);
                 addAmountToTargetAccount(transfer);                                        //dodaje kwote przelewu do konta docelowego
                 changeTransferStatusToCompleted(transfer);
@@ -78,15 +70,10 @@ public class TransferServiceImpl {
 
     }
 
-    @Autowired
-    public TransferServiceImpl(TransferRepository transferRepository1, AccountServiceImpl accountService) {
-        this.transferRepository = transferRepository1;
-        this.accountService = accountService;
-    }
-
     public Transfer createNewTransfer(Transfer transfer) {
         Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccountNumber());
         Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());
+
         BigDecimal amount = transfer.getAmount();
         substractAmountFromSendingAccount(sendingAccount, targetAccount, amount);
         accountService.save(sendingAccount);

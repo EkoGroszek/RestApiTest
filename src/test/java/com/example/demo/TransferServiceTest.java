@@ -35,6 +35,7 @@ public class TransferServiceTest {
     @MockBean
     AccountServiceImpl accountService;
 
+
     User user;
 
     @Before
@@ -47,7 +48,7 @@ public class TransferServiceTest {
 
 //       accountService = new AccountServiceImpl(accountRepository);
 //
-        transferService = new TransferServiceImpl();
+        transferService = new TransferServiceImpl(transferRepository, accountService);
     }
 //cos tam ;kajsdsd
 
