@@ -58,8 +58,8 @@ public class TransferServiceTest {
         Transfer transfer2 = new Transfer();
         BigDecimal amount = new BigDecimal(20);
         transfer.setAmount(amount);
-        transfer.setSendingAccountNumber("76116022020000000034364384");
-        transfer.setTargetAccountNumber("77116022020000000034364384");
+        transfer.getSendingAccount().setAccountNumber("76116022020000000034364384");
+        transfer.getTargetAccount().setAccountNumber("77116022020000000034364384");
         transfer.setStatus("PENDING");
         transfer2 = transferService.changeTransferStatusToCompleted(transfer);
 

@@ -32,14 +32,13 @@ public class TransferServiceImpl {
 //        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
         List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
 
-        // TODO: 22.07.2019  nie uzależniać sie od nazyw enuma (getValue() w enumie)
         for (Transfer transfer : transfers) {
             if (TransferStatus.PENDING.getValue().equals(transfer.getStatus())) {
                 setTransferPostingDate(transfer);
                 addAmountToTargetAccount(transfer);
                 changeTransferStatusToCompleted(transfer);
             }
-            // TODO: 22.07.2019 dodać try catch żeby w razie błędu podczas updateu salda reszta kont zostła zupdateowana  
+            // TODO: 22.07.2019 dodać try catch żeby w razie błędu podczas updateu salda reszta kont zostła zupdateowana
             transferRepository.save(transfer);
         }
 
@@ -57,8 +56,10 @@ public class TransferServiceImpl {
 
     // TODO: 22.07.2019 test do tego | wyciągnąc do osobnej klasy | stworzyć interfejs (dwie implementacje z api i bez) "targetAccountBalanceCalculator" - fabryka
     private void addAmountToTargetAccount(Transfer transfer) {
-        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccountNumber());
-        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());
+        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccount().getAccountNumber());
+        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount().getAccountNumber());
+//        transfer.setSendingAccount(sendingAccount);
+//        transfer.setTargetAccount(targetAccount);
         BigDecimal amount = transfer.getAmount();
 
         if (sendingAccount.getCurrency().equals(targetAccount.getCurrency())) {
@@ -72,18 +73,16 @@ public class TransferServiceImpl {
     }
 
     public Transfer createNewTransfer(Transfer transfer) {
-        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccountNumber());
-        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccountNumber());
+        Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccount().getAccountNumber());
+        Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount().getAccountNumber());
 
         BigDecimal amount = transfer.getAmount();
         subtractAmountFromSendingAccount(sendingAccount, amount);
-        accountService.save(sendingAccount);
-        accountService.save(targetAccount);
-
+        transfer.setSendingAccount(accountService.save(sendingAccount));
+        transfer.setTargetAccount(accountService.save(targetAccount));
 
         transfer.setDateOfSendingTransfer(LocalDateTime.now());
         transfer.setStatus(TransferStatus.PENDING.getValue());
-
 
         return transferRepository.save(transfer);
     }
@@ -104,17 +103,12 @@ public class TransferServiceImpl {
     }
 
     // TODO: 22.07.2019 błąd w nazwie
-    public List<Transfer> getTransfersListForAccountByUserName(String account_number) {
-        return transferRepository.findAllBySendingAccountNumber(account_number);
+
+    public List<Transfer> getSendedTransfersListForAccountById(Integer accountId) {
+        return transferRepository.findAllBySendingAccountId(accountId);
     }
 
-    public List<Transfer> getSendedTransfersListForAccountById(Integer account_id) {
-        Account account = accountService.findById(account_id);
-        return transferRepository.findAllBySendingAccountNumber(account.getAccountNumber());
-    }
-
-    public List<Transfer> getRecievedTransfersListForAccountById(Integer account_id) {
-        Account account = accountService.findById(account_id);
-        return transferRepository.findAllByTargetAccountNumber(account.getAccountNumber());
+    public List<Transfer> getRecievedTransfersListForAccountById(Integer accountId) {
+        return transferRepository.findAllByTargetAccountId(accountId);
     }
 }

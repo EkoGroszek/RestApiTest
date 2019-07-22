@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -16,11 +17,14 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     // TODO: 22.07.2019  przerobić na konta zamiast numerów kont
-    private String sendingAccountNumber;
+
+    @OneToOne
+    private Account sendingAccount;
 
     private BigDecimal amount;
 
-    private String targetAccountNumber;
+    @OneToOne
+    private Account targetAccount;
 
     private LocalDateTime dateOfSendingTransfer;
 
@@ -28,6 +32,5 @@ public class Transfer {
 
     private String status;
 
-    // TODO: 22.07.2019  wyekstraktować enum do osobnej klasy "transferStatus"
 
 }

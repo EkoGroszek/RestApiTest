@@ -19,10 +19,6 @@ public class TransferEndpoint {
         this.transferService = transferService;
     }
 
-    @GetMapping("/{accountNumber}")
-    public ResponseEntity<List<Transfer>> getTransfersListByUserName(@PathVariable String accountNumber) {
-        return new ResponseEntity<>(transferService.getTransfersListForAccountByUserName(accountNumber), HttpStatus.OK);
-    }
 
     @GetMapping("/sended/{accountId}")
     public ResponseEntity<List<Transfer>> getSentTransfersListById(@PathVariable Integer accountId) {
