@@ -19,19 +19,19 @@ public class TransferEndpoint {
         this.transferService = transferService;
     }
 
-    @GetMapping("/{account_number}")
-    public ResponseEntity<List<Transfer>> getTransfersListByUserName(@PathVariable String account_number) {
-        return new ResponseEntity<>(transferService.getTransfersListForAccountByUserName(account_number), HttpStatus.OK);
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<List<Transfer>> getTransfersListByUserName(@PathVariable String accountNumber) {
+        return new ResponseEntity<>(transferService.getTransfersListForAccountByUserName(accountNumber), HttpStatus.OK);
     }
 
-    @GetMapping("/sended/{account_id}")
-    public ResponseEntity<List<Transfer>> getSendedTransfersListById(@PathVariable Integer account_id) {
-        return new ResponseEntity<>(transferService.getSendedTransfersListForAccountById(account_id), HttpStatus.OK);
+    @GetMapping("/sended/{accountId}")
+    public ResponseEntity<List<Transfer>> getSentTransfersListById(@PathVariable Integer accountId) {
+        return new ResponseEntity<>(transferService.getSendedTransfersListForAccountById(accountId), HttpStatus.OK);
     }
 
-    @GetMapping("/received/{account_id}")
-    public ResponseEntity<List<Transfer>> getRecievedTransfersListById(@PathVariable Integer account_id) {
-        return new ResponseEntity<>(transferService.getRecievedTransfersListForAccountById(account_id), HttpStatus.OK);
+    @GetMapping("/received/{accountId}")
+    public ResponseEntity<List<Transfer>> getReceivedTransfersListById(@PathVariable Integer accountId) {
+        return new ResponseEntity<>(transferService.getRecievedTransfersListForAccountById(accountId), HttpStatus.OK);
     }
 
     @PostMapping

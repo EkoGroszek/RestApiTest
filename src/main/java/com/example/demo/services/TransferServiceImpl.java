@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dao.TransferRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Transfer;
+import com.example.demo.entities.TransferStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,12 @@ public class TransferServiceImpl {
     @Scheduled(fixedRate = 15000)
     public void completeTransfer() {
         // TODO: 22.07.2019  odfiltrować przelewy "panding" z bazy
+//        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
         List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
 
         // TODO: 22.07.2019  nie uzależniać sie od nazyw enuma (getValue() w enumie)
         for (Transfer transfer : transfers) {
-            if (String.valueOf(Transfer.status.PENDING).equals(transfer.getStatus())) {
+            if (TransferStatus.PENDING.getValue().equals(transfer.getStatus())) {
                 setTransferPostingDate(transfer);
                 addAmountToTargetAccount(transfer);
                 changeTransferStatusToCompleted(transfer);
@@ -44,7 +46,7 @@ public class TransferServiceImpl {
     }
 
     public Transfer changeTransferStatusToCompleted(Transfer transfer) {
-        transfer.setStatus(String.valueOf(Transfer.status.COMPLETED));
+        transfer.setStatus(TransferStatus.COMPLETED.getValue());
         return transfer;
 
     }
@@ -80,7 +82,7 @@ public class TransferServiceImpl {
 
 
         transfer.setDateOfSendingTransfer(LocalDateTime.now());
-        transfer.setStatus(String.valueOf(Transfer.status.PENDING));
+        transfer.setStatus(TransferStatus.PENDING.getValue());
 
 
         return transferRepository.save(transfer);

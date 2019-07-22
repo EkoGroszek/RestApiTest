@@ -29,7 +29,5 @@ public class Transfer {
     private String status;
 
     // TODO: 22.07.2019  wyekstraktować enum do osobnej klasy "transferStatus"
-    public enum status {
-        PENDING, COMPLETED
-    }
+
 }
