@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Setter
 @Getter
 public class ExchangeRates implements Serializable {
 
-    private Map<String, Double> rates;
+    private Map<String, BigDecimal> rates;
 
     private String base;
 

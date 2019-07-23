@@ -64,7 +64,7 @@ public class TransferServiceImpl {
         if (sendingAccount.getCurrency().equals(targetAccount.getCurrency())) {
             targetAccount.setBalance(targetAccount.getBalance().add(amount));
         } else {
-            BigDecimal amountAfterCurrencyConversion = amount.multiply(BigDecimal.valueOf(getRate(sendingAccount.getCurrency(), targetAccount.getCurrency())));
+            BigDecimal amountAfterCurrencyConversion = amount.multiply(getRate(sendingAccount.getCurrency(), targetAccount.getCurrency()));
             targetAccount.setBalance(targetAccount.getBalance().add(amountAfterCurrencyConversion));
         }
         accountService.save(targetAccount);
@@ -92,9 +92,8 @@ public class TransferServiceImpl {
         sendingAccount.setBalance(sendingAccount.getBalance().subtract(amount));
     }
 
-    //// TODO: 22.07.2019  zmienić double na BigDecimal
     //// TODO: 22.07.2019  zabezpieczyć przed Nullpointerem
-    private double getRate(String sendedCurrency, String targetCurrency) {
+    private BigDecimal getRate(String sendedCurrency, String targetCurrency) {
         RestTemplate restTemplate = new RestTemplate();
         String fooResourceUrl = "https://api.exchangeratesapi.io/latest?base=";
 
