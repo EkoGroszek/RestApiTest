@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Transfer;
+import com.example.demo.entities.TransferStatus;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,17 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TransferRepository extends CrudRepository<Transfer, Integer> {
-
-//    List<Transfer> findAllBySendingAccountNumber(String accountNumber);
-//    List<Transfer> findAllBySendingAccount(Account account);
-//    List<Transfer> findAllByTargetAccount(Account account);
-
     List<Transfer> findAllBySendingAccountId(Integer id);
     List<Transfer> findAllByTargetAccountId(Integer id);
-
-
-//
-//    List<Transfer> findAllByTargetAccountNumber(String accountNumber);
-
-
+    List<Transfer> findAllByStatus(String status);
 }

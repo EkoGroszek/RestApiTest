@@ -23,8 +23,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
-    @Column(unique=true)
+    @Column(unique = true)
     @Size(min = 26, max = 26)
     private String accountNumber;
 

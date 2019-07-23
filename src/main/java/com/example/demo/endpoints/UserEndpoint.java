@@ -21,9 +21,9 @@ public class UserEndpoint {
     }
 
 
-//    @GetMapping("/all")
-//    public ResponseEntity<Iterable<User>> getAll() {
-//        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
-//    }
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<User>> getAll() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
 
 }

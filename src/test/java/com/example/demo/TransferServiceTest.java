@@ -35,6 +35,9 @@ public class TransferServiceTest {
     @MockBean
     AccountServiceImpl accountService;
 
+    Account account;
+
+    Account account2;
 
     User user;
 
@@ -45,12 +48,8 @@ public class TransferServiceTest {
         Account account2 = new Account("77116022020000000034364384", new BigDecimal(100), user, "PLN", "NameSecond");
         accountRepository.save(account);
         accountRepository.save(account2);
-
-//       accountService = new AccountServiceImpl(accountRepository);
-//
         transferService = new TransferServiceImpl(transferRepository, accountService);
     }
-//cos tam ;kajsdsd
 
     @Test
     public void transferBeforePostShouldHasStatusPending() {
@@ -58,14 +57,11 @@ public class TransferServiceTest {
         Transfer transfer2 = new Transfer();
         BigDecimal amount = new BigDecimal(20);
         transfer.setAmount(amount);
-        transfer.getSendingAccount().setAccountNumber("76116022020000000034364384");
-        transfer.getTargetAccount().setAccountNumber("77116022020000000034364384");
+        transfer.setSendingAccount(account);
+        transfer.setTargetAccount(account2);
         transfer.setStatus("PENDING");
         transfer2 = transferService.changeTransferStatusToCompleted(transfer);
-
         Assert.assertThat(transfer2.getStatus(), equalTo("COMPLETED"));
-//        Assert.assertThat(transfer2.getStatus(), equalTo("test failed "));
-
     }
 
 }

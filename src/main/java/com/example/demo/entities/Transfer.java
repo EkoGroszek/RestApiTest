@@ -16,7 +16,6 @@ public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    // TODO: 22.07.2019  przerobić na konta zamiast numerów kont
 
     @OneToOne
     private Account sendingAccount;

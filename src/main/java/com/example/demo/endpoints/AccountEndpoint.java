@@ -28,7 +28,6 @@ public class AccountEndpoint {
         return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
-    // TODO: 22.07.2019  zmienić nazwy na camelcase
     @GetMapping("/balance/{accountNumber}")
     public ResponseEntity<BigDecimal> getCurrentBalance(@PathVariable String accountNumber) {
         return new ResponseEntity<>(accountService.getCurrentBalance(accountNumber), HttpStatus.OK);
@@ -39,6 +38,7 @@ public class AccountEndpoint {
         return new ResponseEntity<>(accountService.findById(accountId), HttpStatus.OK);
     }
 
+    // TODO: 23.07.2019 dopisać nowy exception żeby rzucało jak chce się zduplikować konto
     @PostMapping
     public ResponseEntity<Account> addAccount(@RequestBody Account account) {
         return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);

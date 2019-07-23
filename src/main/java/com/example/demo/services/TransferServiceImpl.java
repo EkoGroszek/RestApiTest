@@ -30,14 +30,13 @@ public class TransferServiceImpl {
     public void completeTransfer() {
         // TODO: 22.07.2019  odfiltrować przelewy "panding" z bazy
 //        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
-        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
+//        List<Transfer> transfers = (List<Transfer>) transferRepository.findAll();
+        List<Transfer> transfers = transferRepository.findAllByStatus(TransferStatus.PENDING.getValue());
 
         for (Transfer transfer : transfers) {
-            if (TransferStatus.PENDING.getValue().equals(transfer.getStatus())) {
-                setTransferPostingDate(transfer);
-                addAmountToTargetAccount(transfer);
-                changeTransferStatusToCompleted(transfer);
-            }
+            setTransferPostingDate(transfer);
+            addAmountToTargetAccount(transfer);
+            changeTransferStatusToCompleted(transfer);
             // TODO: 22.07.2019 dodać try catch żeby w razie błędu podczas updateu salda reszta kont zostła zupdateowana
             transferRepository.save(transfer);
         }
@@ -72,14 +71,16 @@ public class TransferServiceImpl {
 
     }
 
+    // TODO: 23.07.2019 refactor zrobić jakąś metode wyciągnąć ze srodka czy coś bo za duże to bydle
     public Transfer createNewTransfer(Transfer transfer) {
         Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccount().getAccountNumber());
         Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount().getAccountNumber());
 
         BigDecimal amount = transfer.getAmount();
         subtractAmountFromSendingAccount(sendingAccount, amount);
-        transfer.setSendingAccount(accountService.save(sendingAccount));
-        transfer.setTargetAccount(accountService.save(targetAccount));
+        Account updatedSendingAccount = accountService.save(sendingAccount);
+        transfer.setSendingAccount(updatedSendingAccount);
+        transfer.setTargetAccount(targetAccount);
 
         transfer.setDateOfSendingTransfer(LocalDateTime.now());
         transfer.setStatus(TransferStatus.PENDING.getValue());
