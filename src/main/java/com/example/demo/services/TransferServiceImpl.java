@@ -79,15 +79,6 @@ public class TransferServiceImpl {
         sendingAccount.setBalance(sendingAccount.getBalance().subtract(amount));
     }
 
-//    //// TODO: 22.07.2019  zabezpieczyć przed Nullpointerem
-//    private BigDecimal getRate(String sendedCurrency, String targetCurrency) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        String fooResourceUrl = "https://api.exchangeratesapi.io/latest?base=";
-//
-//        ExchangeRates exchangeRates = restTemplate
-//                .getForObject(fooResourceUrl + sendedCurrency, ExchangeRates.class);
-//        return exchangeRates.getRates().get(targetCurrency);
-//    }
 
     // TODO: 22.07.2019 błąd w nazwie
 

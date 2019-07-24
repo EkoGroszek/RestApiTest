@@ -1,9 +1,6 @@
 package com.example.demo.entities;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Builder
+@AllArgsConstructor
 public class ExternalTransfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
