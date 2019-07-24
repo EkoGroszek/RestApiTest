@@ -33,6 +33,8 @@ public class ExternalTransferServiceImpl {
         ExternalTransfer externalTransfer = converter.convert(transfer);
         BigDecimal amount = externalTransfer.getAmount();
         Account sendingAccount = externalTransfer.getSendingAccount();
+        transfer.setCurrency(sendingAccount.getCurrency());
+        transfer.setBankName("Wiktor77");
         if (!(transfer.getAmount().compareTo(sendingAccount.getBalance()) == 1)) {
             subtractAmountFromSendingAccount(sendingAccount, amount);
             RestTemplate restTemplate = new RestTemplate();
