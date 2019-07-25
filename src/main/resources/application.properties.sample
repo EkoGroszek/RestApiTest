@@ -1,3 +1,5 @@
+
+
 spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=create-drop
 logging.level.org.hibernate.SQL=info
@@ -12,8 +14,4 @@ spring.mail.username=wco823069@gmail.com
 spring.mail.password=Qwerty123!
 
 spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.connectiontimeout=5000
-spring.mail.properties.mail.smtp.timeout=5000
-spring.mail.properties.mail.smtp.writetimeout=5000
-
 spring.mail.properties.mail.smtp.starttls.enable=true
