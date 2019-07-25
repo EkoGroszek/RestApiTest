@@ -18,6 +18,7 @@ public class AccountServiceImpl {
     private final AccountRepository accountRepository;
     private JavaMailSender javaMailSender;
 
+    @Autowired
     public AccountServiceImpl(AccountRepository accountRepository, JavaMailSender javaMailSender) {
         this.accountRepository = accountRepository;
         this.javaMailSender = javaMailSender;
