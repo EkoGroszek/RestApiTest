@@ -12,6 +12,8 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -38,8 +40,11 @@ public class ExternalTransferServiceImpl {
         if (!(transfer.getAmount().compareTo(sendingAccount.getBalance()) == 1)) {
             subtractAmountFromSendingAccount(sendingAccount, amount);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Object> objectResponseEntity = restTemplate.postForEntity("https://comarch.herokuapp.com/transfer/external-transfer", transfer, null);
-        }else {
+            ResponseEntity<Object> objectResponseEntity = null;
+                objectResponseEntity = restTemplate.postForEntity("https://comarch.herokuapp.com/transfer/external-transfer", transfer, null);
+
+
+        } else {
             throw new NoEnoughMoneyException("Zbyt mało pieniędzy ka koncie");
         }
 
