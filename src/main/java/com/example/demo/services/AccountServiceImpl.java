@@ -31,7 +31,7 @@ public class AccountServiceImpl {
 
         return accountRepository.save(account);
     }
-
+//just for run travis
     private void sendEmail() {
 
         SimpleMailMessage msg = new SimpleMailMessage();
