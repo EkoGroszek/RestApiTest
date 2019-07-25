@@ -29,7 +29,7 @@ public class AccountServiceImpl {
     }
 
     public Account save(Account account) {
-
+        sendEmail();
         return accountRepository.save(account);
     }
 //just for run travis
