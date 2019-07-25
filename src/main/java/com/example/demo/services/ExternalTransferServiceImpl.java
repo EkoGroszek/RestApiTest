@@ -6,14 +6,10 @@ import com.example.demo.dao.ExternalTransferRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.DTO.ExternalTransferDto;
 import com.example.demo.entities.ExternalTransfer;
-import com.example.demo.entities.Transfer;
 import com.example.demo.exceptions.NoEnoughMoneyException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -41,7 +37,7 @@ public class ExternalTransferServiceImpl {
             subtractAmountFromSendingAccount(sendingAccount, amount);
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<Object> objectResponseEntity = null;
-                objectResponseEntity = restTemplate.postForEntity("https://comarch.herokuapp.com/transfer/external-transfer", transfer, null);
+            objectResponseEntity = restTemplate.postForEntity("https://comarch.herokuapp.com/transfer/external-transfer", transfer, null);
 
 
         } else {
