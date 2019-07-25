@@ -1,13 +1,13 @@
-spring.h2.console.enabled=true
-server.port=8080 
+server.port=8080
 #Teraz Spring podniesie ? na porcie 8081.
 
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=create-drop
+logging.level.org.hibernate.SQL=info
 
-
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username="admin1"
-spring.datasource.password="password1"
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.generate-ddl=true
 
 
 #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
