@@ -6,8 +6,8 @@ server.port=8080
 
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username="sa"
-spring.datasource.password="elo"
+spring.datasource.username="admin1"
+spring.datasource.password="password1"
 
 
 #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
