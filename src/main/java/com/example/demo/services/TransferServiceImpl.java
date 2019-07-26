@@ -90,9 +90,9 @@ public class TransferServiceImpl {
         msg.setTo(transfer.getEmailAddress());
 
         msg.setSubject("Potwierdzenie przelewu");
-        msg.setText("Pomyślnie przelano kwote :  " + transfer.getAmount() +
-                    "z konta " + transfer.getSendingAccount() +
-                    " na konto " + transfer.getTargetAccount());
+        msg.setText("Pomyślnie przelano kwote : " + transfer.getAmount() + transfer.getSendingAccount().getCurrency() +
+                    " z konta " + transfer.getSendingAccount().getAccountNumber() +
+                    " na konto " + transfer.getTargetAccount().getAccountNumber());
 
         javaMailSender.send(msg);
 
