@@ -89,7 +89,7 @@ public class TransferServiceImpl {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(transfer.getEmailAddress());
 
-        msg.setSubject("Potwierdzenie przelewu");
+        msg.setSubject("Potwierdzenie przelewu wewnętrznego ");
         msg.setText("Pomyślnie przelano kwote : " + transfer.getAmount() + transfer.getSendingAccount().getCurrency() +
                     " z konta " + transfer.getSendingAccount().getAccountNumber() +
                     " na konto " + transfer.getTargetAccount().getAccountNumber());

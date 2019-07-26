@@ -6,9 +6,12 @@ import com.example.demo.dao.ExternalTransferRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.DTO.ExternalTransferDto;
 import com.example.demo.entities.ExternalTransfer;
+import com.example.demo.entities.Transfer;
 import com.example.demo.exceptions.NoEnoughMoneyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,12 +21,16 @@ import java.math.BigDecimal;
 public class ExternalTransferServiceImpl {
 
     private ExternalTransferDtoToExternalTransferConverter converter;
+
     private ExternalTransferRepository externalTransferRepository;
 
+    private JavaMailSender javaMailSender;
+
     @Autowired
-    public ExternalTransferServiceImpl(ExternalTransferDtoToExternalTransferConverter converter, ExternalTransferRepository externalTransferRepository) {
+    public ExternalTransferServiceImpl(ExternalTransferDtoToExternalTransferConverter converter, ExternalTransferRepository externalTransferRepository,  JavaMailSender javaMailSender) {
         this.converter = converter;
         this.externalTransferRepository = externalTransferRepository;
+        this.javaMailSender = javaMailSender;
     }
 
     // TODO: 24.07.2019
@@ -39,12 +46,28 @@ public class ExternalTransferServiceImpl {
             ResponseEntity<Object> objectResponseEntity = null;
             objectResponseEntity = restTemplate.postForEntity("https://comarch.herokuapp.com/transfer/external-transfer", transfer, null);
 
-
         } else {
             throw new NoEnoughMoneyException("Zbyt mało pieniędzy ka koncie");
         }
 
+        if (externalTransfer.getIfSendEmail()) {
+            sendEmail(externalTransfer);
+        }
+
         return externalTransferRepository.save(externalTransfer);
+    }
+
+    private void sendEmail(ExternalTransfer transfer) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(transfer.getEmailAddress());
+
+        msg.setSubject("Potwierdzenie przelewu zewnętrznego ");
+        msg.setText("Pomyślnie przelano kwote : " + transfer.getAmount() + transfer.getSendingAccount().getCurrency() +
+                " z konta " + transfer.getSendingAccount().getAccountNumber() +
+                " na konto " + transfer.getTargetAccount());
+
+        javaMailSender.send(msg);
+
     }
 
     private void subtractAmountFromSendingAccount(Account sendingAccount, BigDecimal amount) {

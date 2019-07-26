@@ -25,4 +25,8 @@ public class ExternalTransfer {
     private String targetAccount;
 
     private LocalDateTime dateOfSendingTransfer;
+
+    private String emailAddress;
+
+    private Boolean ifSendEmail;
 }
