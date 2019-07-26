@@ -50,21 +50,21 @@ public class ExternalTransferServiceImpl {
             throw new NoEnoughMoneyException("Zbyt mało pieniędzy ka koncie");
         }
 
-        if (externalTransfer.getIfSendEmail()) {
-            sendEmail(externalTransfer);
+        if (transfer.getIfSendEmail()) {
+            sendEmail(transfer);
         }
 
         return externalTransferRepository.save(externalTransfer);
     }
 
-    private void sendEmail(ExternalTransfer transfer) {
+    private void sendEmail(ExternalTransferDto transfer) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(transfer.getEmailAddress());
 
         msg.setSubject("Potwierdzenie przelewu zewnętrznego ");
-        msg.setText("Pomyślnie przelano kwote : " + transfer.getAmount() + transfer.getSendingAccount().getCurrency() +
-                " z konta " + transfer.getSendingAccount().getAccountNumber() +
-                " na konto " + transfer.getTargetAccount());
+        msg.setText("Pomyślnie przelano kwote : " + transfer.getAmount() + transfer.getCurrency() +
+                " z konta " + transfer.getExternalAccount() +
+                " na konto " + transfer.getToAccount());
 
         javaMailSender.send(msg);
 

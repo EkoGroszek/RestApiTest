@@ -18,4 +18,8 @@ public class ExternalTransferDto {
         private String externalAccount;
 
         private String toAccount;
+
+        private String emailAddress;
+
+        private Boolean ifSendEmail;
 }
