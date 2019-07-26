@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -35,6 +36,9 @@ public class TransferServiceTest {
     @MockBean
     AccountServiceImpl accountService;
 
+    @MockBean
+    JavaMailSender javaMailSender;
+
     Account account;
 
     Account account2;
@@ -48,7 +52,7 @@ public class TransferServiceTest {
         Account account2 = new Account("77116022020000000034364384", new BigDecimal(100), user, "PLN", "NameSecond");
         accountRepository.save(account);
         accountRepository.save(account2);
-        transferService = new TransferServiceImpl(transferRepository, accountService);
+        transferService = new TransferServiceImpl(transferRepository, accountService, javaMailSender);
     }
 
     @Test

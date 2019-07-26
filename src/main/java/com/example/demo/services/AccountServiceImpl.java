@@ -16,12 +16,10 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl {
     private final AccountRepository accountRepository;
-    private JavaMailSender javaMailSender;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository, JavaMailSender javaMailSender) {
+    public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
-        this.javaMailSender = javaMailSender;
     }
 
     public Iterable<Account> findAll() {
@@ -29,21 +27,10 @@ public class AccountServiceImpl {
     }
 
     public Account save(Account account) {
-        sendEmail();
         return accountRepository.save(account);
     }
 //just for run travis
-    private void sendEmail() {
 
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo("jachimczak3125@gmail.com");
-
-        msg.setSubject("Testing from Spring Boot");
-        msg.setText("Hello World \n Spring Boot Email");
-
-        javaMailSender.send(msg);
-
-    }
 
     public Account updateAccountBalance(String accountNumber, AccountBalanceUpdateDto accountBalanceUpdate) {
         BigDecimal updatedAccountBalance = accountBalanceUpdate.getBalance();

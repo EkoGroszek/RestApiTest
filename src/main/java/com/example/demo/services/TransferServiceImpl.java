@@ -6,6 +6,8 @@ import com.example.demo.entities.Transfer;
 import com.example.demo.entities.TransferStatus;
 import com.example.demo.services.factory.TargetAccountBalanceCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,10 +23,14 @@ public class TransferServiceImpl {
 
     private AccountServiceImpl accountService;
 
+    private JavaMailSender javaMailSender;
+
+
     @Autowired
-    public TransferServiceImpl(TransferRepository transferRepository, AccountServiceImpl accountService) {
+    public TransferServiceImpl(TransferRepository transferRepository, AccountServiceImpl accountService, JavaMailSender javaMailSender) {
         this.transferRepository = transferRepository;
         this.accountService = accountService;
+        this.javaMailSender = javaMailSender;
     }
 
     @Scheduled(fixedRate = 15000)
@@ -72,7 +78,24 @@ public class TransferServiceImpl {
         transfer.setDateOfSendingTransfer(LocalDateTime.now());
         transfer.setStatus(TransferStatus.PENDING.getValue());
 
+        if (transfer.getIfSendEmail()) {
+            sendEmail(transfer);
+        }
+
         return transferRepository.save(transfer);
+    }
+
+    private void sendEmail(Transfer transfer) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(transfer.getEmailAddress());
+
+        msg.setSubject("Potwierdzenie przelewu");
+        msg.setText("Pomyślnie przelano kwote :  " + transfer.getAmount() +
+                    "z konta " + transfer.getSendingAccount() +
+                    " na konto " + transfer.getTargetAccount());
+
+        javaMailSender.send(msg);
+
     }
 
     private void subtractAmountFromSendingAccount(Account sendingAccount, BigDecimal amount) {

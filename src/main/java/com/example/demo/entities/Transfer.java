@@ -31,5 +31,8 @@ public class Transfer {
 
     private String status;
 
+    private String emailAddress;
+
+    private Boolean ifSendEmail;
 
 }
