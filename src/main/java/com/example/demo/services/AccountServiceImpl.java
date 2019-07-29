@@ -26,8 +26,7 @@ public class AccountServiceImpl {
         return accountRepository.findAll();
     }
 
-    public Account save(Account account) {
-        return accountRepository.save(account);
+    public Account save(Account account) {return accountRepository.save(account);
     }
 //just for run travis
 

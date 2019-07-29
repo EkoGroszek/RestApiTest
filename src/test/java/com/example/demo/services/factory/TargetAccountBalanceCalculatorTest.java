@@ -18,6 +18,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 public class TargetAccountBalanceCalculatorTest {
@@ -52,7 +54,6 @@ public class TargetAccountBalanceCalculatorTest {
         accountRepository.save(sendingAccount);
         accountRepository.save(targetAccount);
         accountRepository.save(targetAccountInEuro);
-        accountService = new AccountServiceImpl(accountRepository);
 
         accountServiceMock = mock(AccountServiceImpl.class);
         when(accountServiceMock.findByAccountNumber(sendingAccount.getAccountNumber())).thenReturn(sendingAccount);
@@ -102,5 +103,19 @@ public class TargetAccountBalanceCalculatorTest {
         BigDecimal result = targetAccountInEuro.getBalance();
         //THEN
         Assert.assertThat(result, equalTo(expectedBalanceAtTargetAccountAfterTransfer));
+    }
+
+    @Test
+    public void oneInvokeOfSetBalanceOfTargetAccountShouldSaveAccountOnce() {
+        Transfer transfer = Transfer.builder()
+                .amount(new BigDecimal(10))
+                .sendingAccount(sendingAccount)
+                .targetAccount(targetAccount)
+                .build();
+        BigDecimal balanceAtTargetAccountBeforeTransfer = targetAccount.getBalance();
+        BigDecimal expectedBalanceAtTargetAccountAfterTransfer = balanceAtTargetAccountBeforeTransfer.add(BigDecimal.valueOf(10));
+        //WHEN
+        targetAccountBalanceCalculator.setBalanceOfTargetAccount(transfer);
+        verify(accountServiceMock, times(1)).save(targetAccount);
     }
 }
