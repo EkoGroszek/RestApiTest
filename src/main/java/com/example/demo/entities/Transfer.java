@@ -1,17 +1,16 @@
 package com.example.demo.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
+@AllArgsConstructor
+@Builder
 public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +33,4 @@ public class Transfer {
     private String emailAddress;
 
     private Boolean ifSendEmail;
-
 }

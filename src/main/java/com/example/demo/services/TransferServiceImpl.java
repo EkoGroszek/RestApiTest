@@ -10,7 +10,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,12 +24,15 @@ public class TransferServiceImpl {
 
     private JavaMailSender javaMailSender;
 
+    private TargetAccountBalanceCalculator targetAccountBalanceCalculator;
+
 
     @Autowired
-    public TransferServiceImpl(TransferRepository transferRepository, AccountServiceImpl accountService, JavaMailSender javaMailSender) {
+    public TransferServiceImpl(TransferRepository transferRepository, AccountServiceImpl accountService, JavaMailSender javaMailSender, TargetAccountBalanceCalculator targetAccountBalanceCalculator) {
         this.transferRepository = transferRepository;
         this.accountService = accountService;
         this.javaMailSender = javaMailSender;
+        this.targetAccountBalanceCalculator = targetAccountBalanceCalculator;
     }
 
     @Scheduled(fixedRate = 15000)
@@ -59,8 +61,7 @@ public class TransferServiceImpl {
 
     // TODO: 22.07.2019 test do tego | wyciągnąc do osobnej klasy(DONE) | stworzyć interfejs (dwie implementacje z api i bez) "TargetAccountBalanceCalculator" - fabryka
     private void addAmountToTargetAccount(Transfer transfer) {
-        TargetAccountBalanceCalculator targetAccountBalanceCalculator = new TargetAccountBalanceCalculator();
-        targetAccountBalanceCalculator.setBalanceOfTargetAccount(transfer, accountService);
+        targetAccountBalanceCalculator.setBalanceOfTargetAccount(transfer);
 
     }
 
