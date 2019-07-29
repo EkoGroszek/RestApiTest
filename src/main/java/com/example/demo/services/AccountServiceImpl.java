@@ -28,8 +28,6 @@ public class AccountServiceImpl {
 
     public Account save(Account account) {return accountRepository.save(account);
     }
-//just for run travis
-
 
     public Account updateAccountBalance(String accountNumber, AccountBalanceUpdateDto accountBalanceUpdate) {
         BigDecimal updatedAccountBalance = accountBalanceUpdate.getBalance();
