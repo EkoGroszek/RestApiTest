@@ -56,43 +56,6 @@ public class TransferServiceTest {
         transferService = new TransferServiceImpl(transferRepository, accountService, javaMailSender, targetAccountBalanceCalculator);
     }
 
-    @Test
-    public void transferBeforePostShouldHasStatusPending() {
-        //GIVEN
-        Transfer transfer = new Transfer();
-        Transfer transfer2 = new Transfer();
-        BigDecimal amount = new BigDecimal(20);
-        transfer.setAmount(amount);
-        transfer.setSendingAccount(sendingAccount);
-        transfer.setTargetAccount(targetAccount);
-        transfer.setStatus("PENDING");
 
-        //WHEN
-        transfer2 = transferService.changeTransferStatusToCompleted(transfer);
-
-        //THEN
-        Assert.assertThat(transfer2.getStatus(), equalTo("COMPLETED"));
-    }
-
-    @Test
-    public void transferBetweenTwoAccountsInTheSameCurrencyShouldAddRightAmountOfMoneyToTargetAccount() {
-//        //GIVEN
-//        Transfer transfer = Transfer.builder()
-//                .amount(new BigDecimal(10))
-//                .sendingAccount(sendingAccount)
-//                .targetAccount(targetAccount)
-//                .build();
-//        transferService.se
-//
-//        //WHEN
-//        //THEN
-//        Assert.as
-    }
-
-
-
-    //GIVEN
-    //WHEN
-    //THEN
 
 }

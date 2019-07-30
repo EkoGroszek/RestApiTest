@@ -60,7 +60,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void accountNameShouldBeChangedAfterChanging(){
+    public void accountNameShouldBeChangedAfterChanging() {
         //GIVEN
         String accountNumber = account.getAccountNumber();
         String accountNameAfterChanging = "StubName";
@@ -68,12 +68,11 @@ public class AccountServiceImplTest {
         when(accountRepository.findByAccountNumber(accountNumber)).thenReturn(account);
         accountService.changeAccountName(accountNumber, accountNameAfterChanging);
         //THEN
-
         Assert.assertThat(account.getName(), equalTo(accountNameAfterChanging));
     }
 
     @Test(expected = AccountDoesNotExistException.class)
-    public void searchingForAccountThatNotExistShouldThrowAccountDoesNotExistException(){
+    public void searchingForAccountThatNotExistShouldThrowAccountDoesNotExistException() {
         String numberThatNotExist = "23123423281929291202919292929";
         when(accountRepository.findByAccountNumber(numberThatNotExist)).thenReturn(null);
         accountService.findByAccountNumber(numberThatNotExist);

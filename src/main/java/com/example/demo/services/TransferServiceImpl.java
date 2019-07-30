@@ -36,7 +36,7 @@ public class TransferServiceImpl {
     }
 
     @Scheduled(fixedRate = 15000)
-    public void completeTransfer() {
+    private void completeTransfer() {
         List<Transfer> transfers = transferRepository.findAllByStatus(TransferStatus.PENDING.getValue());
 
         for (Transfer transfer : transfers) {
@@ -49,7 +49,7 @@ public class TransferServiceImpl {
 
     }
 
-    public Transfer changeTransferStatusToCompleted(Transfer transfer) {
+    private Transfer changeTransferStatusToCompleted(Transfer transfer) {
         transfer.setStatus(TransferStatus.COMPLETED.getValue());
         return transfer;
 
