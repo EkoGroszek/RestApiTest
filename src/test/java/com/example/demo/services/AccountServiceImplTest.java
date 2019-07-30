@@ -4,14 +4,17 @@ import com.example.demo.dao.AccountRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.DTO.AccountBalanceUpdateDto;
 import com.example.demo.entities.User;
+import com.example.demo.exceptions.AccountDoesNotExistException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
@@ -41,7 +44,6 @@ public class AccountServiceImplTest {
         accountRepository.save(account);
     }
 
-
     @Test
     public void accountBalanceShouldBeRightAfterUpdate() {
         //GIVEN
@@ -55,8 +57,26 @@ public class AccountServiceImplTest {
         accountService.updateAccountBalance(accountNumber, accountBalanceUpdateDto);
         //THEN
         Assert.assertThat(account.getBalance(), equalTo(BigDecimal.valueOf(220)));
-
     }
 
+    @Test
+    public void accountNameShouldBeChangedAfterChanging(){
+        //GIVEN
+        String accountNumber = account.getAccountNumber();
+        String accountNameAfterChanging = "StubName";
+        //WHEN
+        when(accountRepository.findByAccountNumber(accountNumber)).thenReturn(account);
+        accountService.changeAccountName(accountNumber, accountNameAfterChanging);
+        //THEN
+
+        Assert.assertThat(account.getName(), equalTo(accountNameAfterChanging));
+    }
+
+    @Test(expected = AccountDoesNotExistException.class)
+    public void searchingForAccountThatNotExistShouldThrowAccountDoesNotExistException(){
+        String numberThatNotExist = "23123423281929291202919292929";
+        when(accountRepository.findByAccountNumber(numberThatNotExist)).thenReturn(null);
+        accountService.findByAccountNumber(numberThatNotExist);
+    }
 
 }
