@@ -4,6 +4,7 @@ import com.example.demo.dao.TransferRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Transfer;
 import com.example.demo.entities.TransferStatus;
+import com.example.demo.exceptions.NoEnoughMoneyException;
 import com.example.demo.services.factory.TargetAccountBalanceCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -69,6 +70,10 @@ public class TransferServiceImpl {
     public Transfer createNewTransfer(Transfer transfer) {
         Account sendingAccount = accountService.findByAccountNumber(transfer.getSendingAccount().getAccountNumber());
         Account targetAccount = accountService.findByAccountNumber(transfer.getTargetAccount().getAccountNumber());
+
+        if(transfer.getAmount().compareTo(sendingAccount.getBalance()) == 1){
+            throw new NoEnoughMoneyException("Zbyt mało pieniędzy ka koncie");
+        }
 
         BigDecimal amount = transfer.getAmount();
         subtractAmountFromSendingAccount(sendingAccount, amount);

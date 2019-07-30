@@ -5,6 +5,7 @@ import com.example.demo.dao.TransferRepository;
 import com.example.demo.entities.Account;
 import com.example.demo.entities.Transfer;
 import com.example.demo.entities.User;
+import com.example.demo.exceptions.NoEnoughMoneyException;
 import com.example.demo.services.factory.TargetAccountBalanceCalculator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -80,15 +81,27 @@ public class TransferServiceTest {
 
     @Test
     public void transferWithAddressEmailShouldCallSendEmailOnce() {
+        //GIVEN
         transfer.setIfSendEmail(true);
+        //WHEN
         transferService.createNewTransfer(transfer);
+        //THEN
         verify(javaMailSender, times(1)).send((SimpleMailMessage) any());
     }
 
     @Test
     public void transferWithoutAddressEmailShouldNotCallSendEmail() {
+        //WHEN
         transferService.createNewTransfer(transfer);
+        //THEN
         verify(javaMailSender, times(0)).send((SimpleMailMessage) any());
     }
 
+    @Test(expected = NoEnoughMoneyException.class)
+    public void transferWithGreaterAmountOfMoneyThanBalanceAtSendingAccountShouldThrowNoEnoughMoneyException(){
+        //GIVEN
+        transfer.setAmount(BigDecimal.valueOf(300));
+        //WHEN
+        transferService.createNewTransfer(transfer);
+    }
 }
